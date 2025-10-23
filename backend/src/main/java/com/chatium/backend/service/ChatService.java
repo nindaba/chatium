@@ -19,6 +19,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class ChatService {
 
     private final ClaudeService claudeService;
+    private final OpenAIService openAIService;
     private final List<ChatMessage> messages = new CopyOnWriteArrayList<>();
     private final Sinks.Many<ChatMessage> messageSink = Sinks.many().multicast().onBackpressureBuffer();
 
@@ -33,7 +34,7 @@ public class ChatService {
                 .orElse(null);
     }
 
-    public ChatMessage sendMessage(String content) {
+    public ChatMessage sendMessage(String content, String provider) {
         // Add user message
         ChatMessage userMessage = ChatMessage.builder()
                 .id(UUID.randomUUID().toString())
@@ -45,13 +46,19 @@ public class ChatService {
         messages.add(userMessage);
         messageSink.tryEmitNext(userMessage);
 
-        // Get Claude's response
-        String claudeResponse = claudeService.sendMessage(content);
+        // Get AI response based on provider
+        String aiResponse;
+        if ("openai".equalsIgnoreCase(provider) || "chatgpt".equalsIgnoreCase(provider)) {
+            aiResponse = openAIService.sendMessage(content);
+        } else {
+            // Default to Claude
+            aiResponse = claudeService.sendMessage(content);
+        }
 
         // Add assistant message
         ChatMessage assistantMessage = ChatMessage.builder()
                 .id(UUID.randomUUID().toString())
-                .content(claudeResponse)
+                .content(aiResponse)
                 .role("assistant")
                 .timestamp(Instant.now())
                 .build();

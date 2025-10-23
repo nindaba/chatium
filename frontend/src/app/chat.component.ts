@@ -21,10 +21,18 @@ import { ChatService, ChatMessage } from './chat.service';
             </div>
             <div>
               <h1 class="text-2xl font-bold">Chatium</h1>
-              <p class="text-indigo-200 text-sm">Chat with Claude</p>
+              <p class="text-indigo-200 text-sm">Chat with AI</p>
             </div>
           </div>
-          <button
+          <div class="flex items-center space-x-4">
+            <select
+              [(ngModel)]="selectedProvider"
+              name="provider"
+              class="bg-white bg-opacity-20 text-white px-4 py-2 rounded-lg border-2 border-white border-opacity-30 focus:outline-none focus:border-opacity-50 cursor-pointer">
+              <option value="claude" class="text-gray-800">Claude</option>
+              <option value="openai" class="text-gray-800">ChatGPT</option>
+            </select>
+            <button
             (click)="clearChat()"
             class="bg-white bg-opacity-20 hover:bg-opacity-30 text-white px-4 py-2 rounded-lg transition-all duration-200 flex items-center space-x-2">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -43,7 +51,7 @@ import { ChatService, ChatMessage } from './chat.service';
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                       d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
               </svg>
-              <p class="text-xl">Start a conversation with Claude</p>
+              <p class="text-xl">Start a conversation with AI</p>
             </div>
           </div>
 
@@ -102,6 +110,7 @@ export class ChatComponent implements OnInit {
   messages: ChatMessage[] = [];
   newMessage = '';
   loading = false;
+  selectedProvider = 'claude';
 
   constructor(private chatService: ChatService) {}
 
@@ -123,7 +132,7 @@ export class ChatComponent implements OnInit {
     const message = this.newMessage;
     this.newMessage = '';
 
-    this.chatService.sendMessage(message).subscribe({
+    this.chatService.sendMessage(message, this.selectedProvider).subscribe({
       next: () => {
         this.loading = false;
         setTimeout(() => this.scrollToBottom(), 100);

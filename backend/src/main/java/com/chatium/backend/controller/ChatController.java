@@ -31,7 +31,8 @@ public class ChatController {
 
     @MutationMapping
     public ChatMessage sendMessage(@Argument SendMessageInput input) {
-        return chatService.sendMessage(input.getContent());
+        String provider = input.getProvider() != null ? input.getProvider() : "claude";
+        return chatService.sendMessage(input.getContent(), provider);
     }
 
     @MutationMapping
