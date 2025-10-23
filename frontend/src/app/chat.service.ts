@@ -52,12 +52,12 @@ export class ChatService {
       .valueChanges.pipe(map((result) => result.data.messages));
   }
 
-  sendMessage(content: string): Observable<ChatMessage> {
+  sendMessage(content: string, provider: string = 'claude'): Observable<ChatMessage> {
     return this.apollo
       .mutate<{ sendMessage: ChatMessage }>({
         mutation: SEND_MESSAGE,
         variables: {
-          input: { content },
+          input: { content, provider },
         },
         refetchQueries: [{ query: GET_MESSAGES }],
       })

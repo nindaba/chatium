@@ -1,14 +1,16 @@
-# Chatium - Chat Application with Claude AI
+# Chatium - Multi-AI Chat Application
 
-A full-stack chat application built with Spring Boot, Angular 20, Tailwind CSS, and GraphQL, featuring integration with Claude AI.
+A full-stack chat application built with Spring Boot, Angular 20, Tailwind CSS, and GraphQL, featuring integration with Claude AI and ChatGPT (OpenAI).
 
 ## Technology Stack
 
 ### Backend
 - **Spring Boot 3.2.0** - Java backend framework
 - **GraphQL** - API query language
-- **Spring WebFlux** - Reactive HTTP client for Claude API
+- **Spring WebFlux** - Reactive HTTP client for AI APIs
 - **Gradle** - Build and dependency management
+- **Claude API** - Anthropic's Claude AI integration
+- **OpenAI API** - ChatGPT integration
 
 ### Frontend
 - **Angular 20** - Modern web framework
@@ -18,12 +20,13 @@ A full-stack chat application built with Spring Boot, Angular 20, Tailwind CSS, 
 
 ## Features
 
-- Real-time chat interface with Claude AI
-- Modern, responsive UI built with Tailwind CSS
-- GraphQL API for efficient data fetching
-- Message history management
-- Clear chat functionality
-- Beautiful gradient design with smooth animations
+- **Multi-AI Support** - Switch between Claude AI and ChatGPT (OpenAI) in real-time
+- **Real-time Chat Interface** - Seamless conversation with AI models
+- **Modern, Responsive UI** - Built with Tailwind CSS
+- **GraphQL API** - Efficient data fetching and mutations
+- **Message History** - View and manage conversation history
+- **Provider Selection** - Easy dropdown to switch between AI providers
+- **Beautiful Design** - Gradient themes with smooth animations
 
 ## Project Structure
 
@@ -43,7 +46,8 @@ chatium/
 │   │   │   │   │   └── SendMessageInput.java
 │   │   │   │   └── service/
 │   │   │   │       ├── ChatService.java
-│   │   │   │       └── ClaudeService.java
+│   │   │   │       ├── ClaudeService.java
+│   │   │   │       └── OpenAIService.java
 │   │   │   └── resources/
 │   │   │       ├── application.properties
 │   │   │       └── graphql/
@@ -70,7 +74,8 @@ chatium/
 - **Node.js 18** or higher
 - **npm** or **yarn**
 - **Gradle 8.0** or higher (or use the included Gradle wrapper)
-- **Claude API Key** (from Anthropic)
+- **Claude API Key** (from Anthropic) - Optional, for Claude AI
+- **OpenAI API Key** (from OpenAI) - Optional, for ChatGPT
 
 ## Setup Instructions
 
@@ -83,19 +88,30 @@ cd chatium
 
 ### 2. Backend Setup
 
-#### Configure Claude API Key
+#### Configure API Keys
 
-Edit `backend/src/main/resources/application.properties` and add your Claude API key:
+You can configure one or both AI providers:
+
+**Option 1: Edit application.properties**
+
+Edit `backend/src/main/resources/application.properties`:
 
 ```properties
-claude.api.key=your-api-key-here
+# For Claude AI
+claude.api.key=your-claude-api-key-here
+
+# For ChatGPT
+openai.api.key=your-openai-api-key-here
 ```
 
-Or set it as an environment variable:
+**Option 2: Set Environment Variables (Recommended)**
 
 ```bash
-export CLAUDE_API_KEY=your-api-key-here
+export CLAUDE_API_KEY=your-claude-api-key-here
+export OPENAI_API_KEY=your-openai-api-key-here
 ```
+
+**Note:** You can use the app without API keys - it will return demo responses. Configure at least one API key for real AI responses.
 
 #### Build and Run
 
@@ -139,10 +155,11 @@ The frontend will start on `http://localhost:4200`
 
 1. Open your browser and navigate to `http://localhost:4200`
 2. You'll see the Chatium chat interface
-3. Type a message in the input field and press "Send" or hit Enter
-4. Claude AI will respond to your message
-5. All messages are displayed in a beautiful chat interface
-6. Use the "Clear" button to delete all messages and start fresh
+3. **Select your AI provider** using the dropdown in the header (Claude or ChatGPT)
+4. Type a message in the input field and press "Send" or hit Enter
+5. The selected AI will respond to your message
+6. **Switch providers anytime** - just select a different AI from the dropdown
+7. Use the "Clear" button to delete all messages and start fresh
 
 ## GraphQL API
 
@@ -175,9 +192,23 @@ query {
 ### Mutations
 
 #### Send Message
+
+With Claude (default):
 ```graphql
 mutation {
-  sendMessage(input: { content: "Hello, Claude!" }) {
+  sendMessage(input: { content: "Hello, Claude!", provider: "claude" }) {
+    id
+    content
+    role
+    timestamp
+  }
+}
+```
+
+With ChatGPT:
+```graphql
+mutation {
+  sendMessage(input: { content: "Hello, ChatGPT!", provider: "openai" }) {
     id
     content
     role
@@ -235,6 +266,24 @@ npm run build
 
 The production build will be in the `dist/` folder.
 
+## Getting API Keys
+
+### Claude API Key
+
+1. Visit https://console.anthropic.com/
+2. Sign up or log in
+3. Navigate to API Keys section
+4. Create a new API key
+5. Add credits to your account
+
+### OpenAI API Key
+
+1. Visit https://platform.openai.com/
+2. Sign up or log in
+3. Navigate to API Keys section
+4. Create a new API key
+5. Add credits to your account
+
 ## Troubleshooting
 
 ### Backend Issues
@@ -244,7 +293,9 @@ The production build will be in the `dist/` folder.
   server.port=8081
   ```
 
-- **Claude API errors**: Ensure your API key is correctly set and valid
+- **Claude API errors**: Ensure your Claude API key is correctly set and valid
+
+- **OpenAI API errors**: Ensure your OpenAI API key is correctly set and valid
 
 ### Frontend Issues
 
@@ -263,6 +314,7 @@ This project is open source and available under the MIT License.
 ## Acknowledgments
 
 - Claude AI by Anthropic
+- ChatGPT by OpenAI
 - Spring Boot team
 - Angular team
 - Tailwind CSS team

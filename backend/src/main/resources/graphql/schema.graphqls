@@ -21,4 +21,5 @@ type ChatMessage {
 
 input SendMessageInput {
     content: String!
+    provider: String
 }

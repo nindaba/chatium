@@ -9,4 +9,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class SendMessageInput {
     private String content;
+    private String provider; // "claude" or "openai"/"chatgpt"
 }
