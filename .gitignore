@@ -1,5 +1,7 @@
-# Backend (Spring Boot / Maven)
+# Backend (Spring Boot / Gradle)
 backend/target/
+backend/build/
+backend/.gradle/
 backend/.mvn/
 backend/mvnw
 backend/mvnw.cmd
