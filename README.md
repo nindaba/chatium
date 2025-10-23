@@ -8,7 +8,7 @@ A full-stack chat application built with Spring Boot, Angular 20, Tailwind CSS, 
 - **Spring Boot 3.2.0** - Java backend framework
 - **GraphQL** - API query language
 - **Spring WebFlux** - Reactive HTTP client for Claude API
-- **Maven** - Build and dependency management
+- **Gradle** - Build and dependency management
 
 ### Frontend
 - **Angular 20** - Modern web framework
@@ -48,7 +48,9 @@ chatium/
 │   │   │       ├── application.properties
 │   │   │       └── graphql/
 │   │   │           └── schema.graphqls
-│   └── pom.xml
+│   ├── build.gradle
+│   ├── settings.gradle
+│   └── gradlew
 └── frontend/                   # Angular 20 frontend
     ├── src/
     │   ├── app/
@@ -67,7 +69,7 @@ chatium/
 - **Java 17** or higher
 - **Node.js 18** or higher
 - **npm** or **yarn**
-- **Maven 3.6** or higher
+- **Gradle 8.0** or higher (or use the included Gradle wrapper)
 - **Claude API Key** (from Anthropic)
 
 ## Setup Instructions
@@ -97,10 +99,16 @@ export CLAUDE_API_KEY=your-api-key-here
 
 #### Build and Run
 
+Using Gradle wrapper (recommended):
 ```bash
 cd backend
-mvn clean install
-mvn spring-boot:run
+./gradlew bootRun
+```
+
+Or using system Gradle:
+```bash
+cd backend
+gradle bootRun
 ```
 
 The backend will start on `http://localhost:8080`
@@ -204,10 +212,18 @@ Angular's development server supports hot module replacement. Changes to TypeScr
 
 ### Backend
 
+Using Gradle wrapper:
 ```bash
 cd backend
-mvn clean package
-java -jar target/backend-1.0.0.jar
+./gradlew build
+java -jar build/libs/backend-1.0.0.jar
+```
+
+Or using system Gradle:
+```bash
+cd backend
+gradle build
+java -jar build/libs/backend-1.0.0.jar
 ```
 
 ### Frontend
