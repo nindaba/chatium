@@ -1,0 +1,24 @@
+type Query {
+    messages: [ChatMessage!]!
+    message(id: ID!): ChatMessage
+}
+
+type Mutation {
+    sendMessage(input: SendMessageInput!): ChatMessage!
+    clearMessages: Boolean!
+}
+
+type Subscription {
+    messageAdded: ChatMessage!
+}
+
+type ChatMessage {
+    id: ID!
+    content: String!
+    role: String!
+    timestamp: String!
+}
+
+input SendMessageInput {
+    content: String!
+}
